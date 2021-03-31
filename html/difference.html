@@ -1,13 +1,12 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="../vendor/materialize/css/materialize.css" rel="stylesheet"
-	type="text/css">
-<link href="../vendor/jsoneditor/css/jsoneditor.css" rel="stylesheet"
-	type="text/css">
+<link href="../vendor/materialize/css/materialize.css" rel="stylesheet" type="text/css">
+<link href="../vendor/jsoneditor/css/jsoneditor.css" rel="stylesheet" type="text/css">
 <link href="../vendor/icon/main.css" rel="stylesheet" >
+<link href="../css/common.css" rel="stylesheet" >
 
 <script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
 <script src="../vendor/materialize/js/materialize.js"></script>
@@ -24,42 +23,107 @@ code {
 	background-color: #f5f5f5;
 }
 
-#jsoneditor {
+#jsoneditor1,
+#jsoneditor2 {
 	width: 100%;
-	height: 500px;
+	height: 450px;
 }
 
 form {
 	padding-left: 40px;
 	padding-right: 40px;
 }
+
+.jsoneditor-menu {
+    background-color: #003b70;
+    border-bottom: 1px solid #003b70;
+}
+
+.jsoneditor {
+    border: thin solid #003b70;
+}
 </style>
 </head>
 <body>
 
-	<nav>
-		<div class="nav-wrapper">
-			<a href="#!" class="brand-logo">&nbsp; &nbsp;<img alt="logo" src="../images/logo.png" width="60px"></a> <a href="#"
-				data-target="mobile-demo" class="sidenav-trigger"><i
-				class="material-icons">menu</i></a>
-			<ul class="right hide-on-med-and-down">
-				<li><a href="formatter.html">Formatter</a></li>
-				<li><a href="difference.html">Difference</a></li>
-			</ul>
+	<div id="menu">
+		<nav>
+			<div class="nav-wrapper">
+				<a href="#!" class="brand-logo">&nbsp; &nbsp;
+				<img alt="logo" src="../images/logo.png" width="60px" style="padding-top: 12px;"></a> 
+				<a href="#" data-target="mobile-demo" class="sidenav-trigger">
+					<i class="material-icons">menu</i>
+				</a>
+				<ul class="right hide-on-med-and-down">
+					<li><a href="formatter.html">Formatter</a></li>
+					<li><a href="difference.html">Difference</a></li>
+				</ul>
+			</div>
+		</nav>
+	
+		<ul class="sidenav" id="mobile-demo">
+			<li><a href="formatter.html">Formatter</a></li>
+			<li><a href="difference.html">Difference</a></li>
+		</ul>
+	</div>
+
+	<div class="container-fluid">
+		<h5 class="center">Difference</h5>
+		<div class="row">
+			<div class="col s5">
+				<div id="jsoneditor1"></div>
+			</div>
+			<div class="col s2"></div>
+			<div class="col s5">
+				<div id="jsoneditor2"></div>
+			</div>
 		</div>
-	</nav>
-
-	<ul class="sidenav" id="mobile-demo">
-		<li><a href="formatter.html">Formatter</a></li>
-		<li><a href="difference.html">Difference</a></li>
-	</ul>
-
-	difference
+	</div>
 
 	<script>
 		$(document).ready(function() {
 			$('.sidenav').sidenav();
 		});
+		
+		var container, options, json, editor;
+
+		container = document.getElementById('jsoneditor1');
+
+		options = {
+			mode : 'code',
+			modes : [ 'code', 'tree' ], // allowed modes
+			onError : function(err) {
+				console.error(err);
+				alert(err.toString());
+			},
+			onChange : function() {
+				console.log('onChange');
+			},
+			onChangeJSON : function(json) {
+				console.log('onChangeJSON', json);
+
+				// test feedback loop which is typical in React -> should not change anything
+				editor.update(json)
+			},
+			onChangeText : function(text) {
+				console.log('onChangeText', text);
+			},
+			onFocus : function(event) {
+				console.log('Focus : ', event);
+			},
+			onBlur : function(event) {
+				console.log('Blur : ', event);
+			},
+			indentation : 4,
+			// escapeUnicode: true,
+			limitDragging : true
+		};
+
+		json = {};
+
+		editor = new JSONEditor(document.getElementById('jsoneditor1'), options, json);
+		
+		editor = new JSONEditor(document.getElementById('jsoneditor2'), options, json);
 	</script>
 </body>
 </html>

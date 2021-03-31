@@ -1,0 +1,19 @@
+nav {
+	background-color: #003b70 !important;
+}
+
+.sidenav {
+	background-color: #b9b8f3  !important;
+	width: 80%;
+}
+
+.sidenav li>a{
+	border-bottom: 1px solid;
+	background-color: #a2a1d8  !important;
+	font-size: 25px;
+}
+
+.sidenav-overlay {
+	height: 100%;
+	left: 80%;
+}
