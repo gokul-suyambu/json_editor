@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="../vendor/materialize/css/materialize.css" rel="stylesheet" type="text/css">
@@ -11,7 +12,40 @@
 <script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
 <script src="../vendor/materialize/js/materialize.js"></script>
 <script src="../vendor/jsoneditor/js/jsoneditor.min.js"></script>
+<script src="../vendor/jsoneditor/js/lodash.min.js"></script>
 
+<style type="text/css">
+.jsoneditor-menu {
+	display: none;
+}
+
+div.jsoneditor-outer.has-main-menu-bar {
+	margin-top: 0px;
+    padding-top: 0px;
+}
+
+
+    code {
+      background-color: #f5f5f5;
+    }
+
+    #jsoneditor_right .different_element {
+      background-color: #acee61;
+    }
+    #jsoneditor_right .different_element div.jsoneditor-field,
+    #jsoneditor_right .different_element div.jsoneditor-value {
+      color: red;
+    }
+
+    #jsoneditor_left .different_element {
+      background-color: pink;
+    }
+    #jsoneditor_left .different_element div.jsoneditor-field,
+    #jsoneditor_left .different_element div.jsoneditor-value {
+      color: red;
+    }
+    
+</style>
 </head>
 <body>
 
@@ -39,58 +73,154 @@
 	<div class="container-fluid">
 		<h5 class="center">Difference</h5>
 		<div class="row">
-			<div class="col s5">
-				<div id="jsoneditor1" class="jsoneditor_wrapper"></div>
+			<div class="col s10"></div>
+			<div class="col s1">
+				<div class="input-field">
+					<select id="mode" name="mode">
+						<option value="code">Code</option>
+						<option value="tree">Tree</option>
+					</select>
+					<label for="mode" class="input-index">Mode</label>
+				</div>
 			</div>
-			<div class="col s2"></div>
-			<div class="col s5">
-				<div id="jsoneditor2" class="jsoneditor_wrapper"></div>
+			<div class="col s1">
+				<button class="button btn waves-effect waves-light green disabled" id="compare">Compare</button>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col s6">
+				<div id="jsoneditor_left" class="jsoneditor_wrapper"></div>
+			</div>
+			<div class="col s6">
+				<div id="jsoneditor_right" class="jsoneditor_wrapper"></div>
+			</div>
+		</div>
+		
 	</div>
 
 	<script>
 		$(document).ready(function() {
 			$('.sidenav').sidenav();
+			
+			$('select').formSelect();
+			
+			$("#compare").click(function(){
+				editorRight.options.onClassName = function({ path, field, value }){
+					const leftValue = _.get(jsonLeft, path);
+				    const rightValue = _.get(jsonRight, path);
+
+				    return _.isEqual(leftValue, rightValue)
+				      ? 'the_same_element'
+				      : 'different_element';
+				};
+				editorRight.refresh();
+				
+				editorLeft.options.onClassName = function({ path, field, value }){
+					const leftValue = _.get(jsonLeft, path);
+				    const rightValue = _.get(jsonRight, path);
+
+				    return _.isEqual(leftValue, rightValue)
+				      ? 'the_same_element'
+				      : 'different_element';
+				}
+				editorLeft.refresh();
+			});
+			
+			$("#mode").change(function(){
+				
+				editorRight.setMode($(this).val());
+				editorLeft.setMode($(this).val());
+				
+				if($(this).val() === "code") {
+					$("#compare").addClass("disabled");
+				} else {
+					$("#compare").removeClass("disabled");
+				}
+			});
+			
 		});
 		
-		var options, json, editor;
+		var optionsLeft, optionsRight, editorLeft, editorRight;
 
-		options = {
+		optionsLeft = {
 			mode : 'code',
-			modes : [ 'code', 'tree' ], // allowed modes
+			//modes : [ 'code', 'tree' ], // allowed modes
 			onError : function(err) {
 				console.error(err);
 				alert(err.toString());
 			},
-			onChange : function() {
-				console.log('onChange');
-			},
 			onChangeJSON : function(json) {
-				console.log('onChangeJSON', json);
-
-				// test feedback loop which is typical in React -> should not change anything
-				editor.update(json)
+				jsonLeft = json;
+				editorRight.refresh();
+				editorLeft.refresh();
 			},
-			onChangeText : function(text) {
-				console.log('onChangeText', text);
-			},
-			onFocus : function(event) {
-				console.log('Focus : ', event);
-			},
-			onBlur : function(event) {
-				console.log('Blur : ', event);
+			onChangeText : function(json) {
+				jsonLeft = JSON.parse(json);
 			},
 			indentation : 4,
 			// escapeUnicode: true,
 			limitDragging : true
 		};
-
-		json = {};
-
-		editor = new JSONEditor(document.getElementById('jsoneditor1'), options, json);
 		
-		editor = new JSONEditor(document.getElementById('jsoneditor2'), options, json);
+		optionsRight = {
+				mode : 'code',
+				//modes : [ 'code', 'tree' ], // allowed modes
+				onError : function(err) {
+					console.error(err);
+					alert(err.toString());
+				},
+				onChangeJSON : function(json) {
+					jsonRight = json;
+					editorRight.refresh();
+					editorLeft.refresh();
+				},
+				onChangeText : function(json) {
+					jsonRight = JSON.parse(json);
+				},
+				indentation : 4,
+				// escapeUnicode: true,
+				limitDragging : true
+			};
+
+		let jsonLeft = {
+			    "arrayOfArrays": [1, 2, 999, [3,4,5]],
+			    "someField": true,
+			    "boolean": true,
+			    "htmlcode": '&quot;',
+			    "escaped_unicode": '\\u20b9',
+			    "unicode": '\u20b9,\uD83D\uDCA9',
+			    "return": '\n',
+			    "null": null,
+			    "thisObjectDoesntExistOnTheRight" : {key: "value"},
+			    "number": 123,
+			    "object": {"a": "b","new":4, "c": "d", "e": [1, 2, 3]},
+			    "string": "Hello World",
+			    "url": "http://jsoneditoronline.org",
+			    "[0]": "zero"
+			  }
+
+			  let jsonRight = {
+			    "arrayOfArrays": [1, 2, [3,4,5]],
+			    "boolean": true,
+			    "htmlcode": '&quot;',
+			    "escaped_unicode": '\\u20b9',
+			    "thisFieldDoesntExistOnTheLeft": 'foobar',
+			    "unicode": '\u20b9,\uD83D\uDCA9',
+			    "return": '\n',
+			    "null": null,
+			    "number": 123,
+			    "object": {"a": "b",  "c": "d", "e": [1, 2, 3]},
+			    "string": "Hello World",
+			    "url": "http://jsoneditoronline.org",
+			    "[0]": "zero"
+			  }
+
+		editorLeft = new JSONEditor(document.getElementById('jsoneditor_left'), optionsLeft, jsonLeft);
+		
+		editorRight = new JSONEditor(document.getElementById('jsoneditor_right'), optionsRight, jsonRight);
+		
+		
+		
 	</script>
 </body>
 </html>

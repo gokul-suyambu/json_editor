@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="../vendor/materialize/css/materialize.css" rel="stylesheet" type="text/css">
@@ -39,6 +40,21 @@
 	<div class="container-fluid">
 		<h5 class="center">Formatter</h5>
 		<div class="row">
+			<div class="col s10"></div>
+			<div class="col s1">
+				
+			</div>
+			<div class="col s1">
+				<div class="input-field">
+					<select id="mode" name="mode">
+						<option value="code">Code</option>
+						<option value="tree">Tree</option>
+					</select>
+					<label for="mode" class="input-index">Mode</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col s12">
 				<div id="jsoneditor" class="jsoneditor_wrapper"></div>
 			</div>
@@ -52,7 +68,7 @@
 
 		options = {
 			mode : 'code',
-			modes : [ 'code', 'tree'], // allowed modes
+			//modes : [ 'code', 'tree'], // allowed modes
 			onError : function(err) {
 				console.error(err);
 				alert(err.toString());
@@ -112,6 +128,19 @@
 
 		$(document).ready(function() {
 			$('.sidenav').sidenav();
+			
+			$('select').formSelect();
+			
+			$("#mode").change(function(){
+				
+				editor.setMode($(this).val());
+				
+				if($(this).val() === "code") {
+					$("#format").removeClass("disabled");
+				} else {
+					$("#format").addClass("disabled");
+				}
+			});
 		});
 	</script>
 </body>
