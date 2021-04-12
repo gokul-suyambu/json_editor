@@ -4,7 +4,7 @@ container = document.getElementById('jsoneditor');
 
 options = {
 	mode: 'code',
-	modes: ['code', 'tree'], // allowed modes
+	//modes: ['code', 'tree'], // allowed modes
 	onError: function(err) {
 		console.error(err);
 		alert(err.toString());
@@ -48,6 +48,10 @@ $(document).ready(function() {
 			$("#compact_format").attr("value", "compact");
 			$("#compact_format").html("Compact");
 			$("#repair").removeClass("disabled");
+			
+			$("#search").val("");
+			$("#search").parent().find("span").html("");
+			$("#search").parent().find("label").removeClass("active");
 		} else {
 			$("#expand_collapse").removeClass("disabled");
 			$("#expand_collapse").attr("value", "collapse");
@@ -57,6 +61,7 @@ $(document).ready(function() {
 			$("#compact_format").addClass("disabled");
 			$("#repair").addClass("disabled");
 		}
+		
 	});
 
 	$("#search").keyup(function() {
@@ -66,11 +71,13 @@ $(document).ready(function() {
 			editor.search($(this).val());
 		} */
 
-		editor.search($(this).val());
-		$(this).parent().find(".helper-text").html($(".jsoneditor-highlight").length + " results");
-
 		if ($(this).val() === "") {
-			$(this).parent().find(".helper-text").html("");
+			$(this).parent().find("span").html("");
+			$(".jsoneditor-highlight").removeClass("jsoneditor-highlight");
+		} else {
+			editor.expandAll();
+			editor.search($(this).val());
+			$(this).parent().find("span").html($(".jsoneditor-highlight").length + " results");
 		}
 	});
 
