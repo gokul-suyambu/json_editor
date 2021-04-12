@@ -1,0 +1,21 @@
+code {
+	background-color: #f5f5f5;
+}
+
+#jsoneditor_right .different_element {
+	background-color: #acee61;
+}
+
+#jsoneditor_right .different_element div.jsoneditor-field,
+	#jsoneditor_right .different_element div.jsoneditor-value {
+	color: red;
+}
+
+#jsoneditor_left .different_element {
+	background-color: pink;
+}
+
+#jsoneditor_left .different_element div.jsoneditor-field,
+	#jsoneditor_left .different_element div.jsoneditor-value {
+	color: red;
+}

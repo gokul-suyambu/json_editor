@@ -8,10 +8,12 @@
 <link href="../vendor/jsoneditor/css/jsoneditor.css" rel="stylesheet" type="text/css">
 <link href="../vendor/icon/main.css" rel="stylesheet" >
 <link href="../css/common.css" rel="stylesheet" >
+<link href="../css/compare.css" rel="stylesheet" >
 
 <script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
 <script src="../vendor/materialize/js/materialize.js"></script>
 <script src="../vendor/jsoneditor/js/jsoneditor.min.js"></script>
+<script src="../vendor/jsoneditor/js/lodash.min.js"></script>
 
 </head>
 <body>
@@ -38,8 +40,8 @@
 	</div>
 
 	<div class="container-fluid">
-		<h5 class="center">Formatter</h5>
-		<div class="row manual">
+		<h5 class="center">Compare</h5>
+		<div class="row">
 			<div class="col s2">
 				<div class="input-field">
 					<select id="mode" name="mode">
@@ -49,34 +51,23 @@
 					<label for="mode" class="input-index">Mode</label>
 				</div>
 			</div>
-			<div class="input-field col s3">
-				<input id="search" name="search" type="text" disabled>
-				<label for="search" class="input-index">Search</label>
-				<span class="helper-text"></span>
-			</div>
-			<div class="col s7 padding_top_23">
-				<button id="expand_collapse" class="button btn waves-effect waves-light green disabled" value="collapse">Collapse</button>
-			
-				<button id="sort" class="button btn waves-effect waves-light green" >Sort</button>
-			
-				<button id="transform" class="button btn waves-effect waves-light green" >Transform</button>
-				
-				<button id="undo" class="button btn waves-effect waves-light green" >Undo</button>
-				
-				<button id="redo" class="button btn waves-effect waves-light green" >Redo</button>
-			
-				<button id="compact_format" class="button btn waves-effect waves-light green" value="compact">Compact</button>
-			
-				<button id="repair" class="button btn waves-effect waves-light green" >Repair</button>
+			<div class="col s10 padding_top_23">
+				<button class="button btn waves-effect waves-light green disabled" id="compare">Compare</button>
+				<button class="button btn waves-effect waves-light green disabled" id="remove">Remove</button>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col s12">
-				<div id="jsoneditor" class="jsoneditor_wrapper"></div>
+			<div class="col s6">
+				<div id="jsoneditor_left" class="jsoneditor_wrapper"></div>
+			</div>
+			<div class="col s6">
+				<div id="jsoneditor_right" class="jsoneditor_wrapper"></div>
 			</div>
 		</div>
+		
 	</div>
+	
+	<script src="../js/compare.js"></script>
 
-	<script src="../js/formatter.js"></script>
 </body>
 </html>

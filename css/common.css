@@ -78,3 +78,22 @@ input[type="submit"] {
 .jsoneditor-modal .pico-close {
 	top: 5px !important;
 }
+
+.padding_top_23 {
+	padding-top: 23px !important;
+}
+
+.jsoneditor-menu {
+	display: none;
+}
+
+div.jsoneditor-outer.has-main-menu-bar {
+	margin-top: 0px;
+    padding-top: 0px;
+}
+
+div.jsoneditor-outer.has-nav-bar.has-main-menu-bar {
+	margin-top: 0px;
+    padding-top: 0px;
+    height: 420px;
+}
