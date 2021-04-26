@@ -57,7 +57,8 @@ var optionsLeft, optionsRight, editorLeft, editorRight;
 
 optionsLeft = {
 	mode: 'code',
-	//modes : [ 'code', 'tree' ], // allowed modes
+	mainMenuBar: false,
+	modes : [ 'code', 'tree' ], // allowed modes
 	onError: function(err) {
 		console.error(err);
 		alert(err.toString());
@@ -77,7 +78,8 @@ optionsLeft = {
 
 optionsRight = {
 	mode: 'code',
-	//modes : [ 'code', 'tree' ], // allowed modes
+	mainMenuBar: false,
+	modes : [ 'code', 'tree' ], // allowed modes
 	onError: function(err) {
 		console.error(err);
 		alert(err.toString());
