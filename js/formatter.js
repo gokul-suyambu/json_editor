@@ -4,7 +4,8 @@ container = document.getElementById('jsoneditor');
 
 options = {
 	mode: 'code',
-	//modes: ['code', 'tree'], // allowed modes
+	modes: ['code', 'tree'], // allowed modes
+	mainMenuBar: false,
 	onError: function(err) {
 		console.error(err);
 		alert(err.toString());
@@ -27,7 +28,42 @@ options = {
 	language: "en"
 };
 
-json = {};
+json = {
+    "arrayOfArrays": [
+        1,
+        2,
+        999,
+        [
+            3,
+            4,
+            5
+        ]
+    ],
+    "someField": true,
+    "boolean": true,
+    "htmlcode": "&quot;",
+    "escaped_unicode": "\\u20b9",
+    "unicode": "₹,💩",
+    "return": "\n",
+    "null": null,
+    "thisObjectDoesntExistOnTheRight": {
+        "key": "value"
+    },
+    "number": 123,
+    "object": {
+        "a": "b",
+        "new": 4,
+        "c": "d",
+        "e": [
+            1,
+            2,
+            3
+        ]
+    },
+    "string": "Hello World",
+    "url": "http://jsoneditoronline.org",
+    "[0]": "zero"
+};
 
 editor = new JSONEditor(container, options, json);
 
