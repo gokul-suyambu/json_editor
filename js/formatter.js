@@ -160,4 +160,10 @@ $(document).ready(function() {
 	$("#undo").click(function() {
 		$(".jsoneditor-undo").click();
 	});
+	
+	$("#sort").hide();
+	$("#transform").hide();
+	$("#repair").hide();
+	$("#redo").hide();
+	$("#undo").hide();
 });
