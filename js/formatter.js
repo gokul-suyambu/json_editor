@@ -5,7 +5,7 @@ container = document.getElementById('jsoneditor');
 options = {
 	mode: 'code',
 	modes: ['code', 'tree'], // allowed modes
-	mainMenuBar: false,
+	//mainMenuBar: false,
 	onError: function(err) {
 		console.error(err);
 		alert(err.toString());
@@ -160,10 +160,4 @@ $(document).ready(function() {
 	$("#undo").click(function() {
 		$(".jsoneditor-undo").click();
 	});
-	
-	$("#sort").hide();
-	$("#transform").hide();
-	$("#repair").hide();
-	$("#redo").hide();
-	$("#undo").hide();
 });
